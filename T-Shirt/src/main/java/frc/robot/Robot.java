@@ -15,7 +15,10 @@ import org.littletonrobotics.junction.LoggedRobot;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.TankDriveConstants;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -26,17 +29,17 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends LoggedRobot {
 
-
-    public static RobotContainer m_robotContainer;
-
-
-  // Joystick stick = new Joystick(0);
+ private Command m_autonomousCommand;
+    //public static RobotContainer m_robotContainer;
 
 
-  // Talon left_drive_motor = new Talon(4);
-  // Talon right_drive_motor = new Talon(2);
-  // Talon vertical_shooter_motor = new Talon(1);
-  // Talon horizontal_shooter_motor = new Talon(0);
+   Joystick driverJoystick = new Joystick(0);
+
+
+  Talon left_drive_motor = new Talon(4);
+  Talon right_drive_motor = new Talon(2);
+ // Talon vertical_shooter_motor = new Talon(1);
+ // Talon horizontal_shooter_motor = new Talon(0);
 
   // DoubleSolenoid confetti1 = new DoubleSolenoid(0, 1);
   // DoubleSolenoid confetti2 = new DoubleSolenoid(2, 3);
@@ -55,7 +58,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotInit() {
 
-    m_robotContainer = new RobotContainer(this); 
+    //m_robotContainer = new RobotContainer(this); 
 
     // m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     // m_chooser.addOption("My Auto", kCustomAuto);
@@ -95,6 +98,11 @@ public class Robot extends LoggedRobot {
     // // autoSelected = SmartDashboard.getString("Auto Selector",
     // // defaultAuto);
     // System.out.println("Auto selected: " + m_autoSelected);
+
+  //  `  m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.schedule();
+    }
   }
 
   /**
@@ -113,11 +121,18 @@ public class Robot extends LoggedRobot {
     // }
   }
 
+  @Override
+  public void teleopInit(){    if (m_autonomousCommand != null) {
+      m_autonomousCommand.cancel();
+    }}
+
   /**
    * This function is called periodically during operator control.
    */
   @Override
   public void teleopPeriodic() {
+
+
     // boolean bconfetti2 = stick.getRawButtonPressed(5);
     // boolean sconfetti2 = stick.getRawButtonReleased(5);
     // boolean bconfetti3 = stick.getRawButtonPressed(6);
@@ -133,25 +148,24 @@ public class Robot extends LoggedRobot {
     // boolean left_horizontal = stick.getRawButtonPressed(3);
     // boolean left_horizontal_stop = stick.getRawButtonReleased(3);
     
-    // if (stick.getRawAxis(1) > 0.1 || stick.getRawAxis(1) < -0.1) 
-    // {
-    //   left_drive_motor.set(stick.getRawAxis(1)/2);
-    // }
+    if (Math.abs(driverJoystick.getRawAxis(ControllerConstants.LeftAxis))>ControllerConstants.LeftAxisDeadZone) 
+    {
+      left_drive_motor.set(Math.abs(driverJoystick.getRawAxis(ControllerConstants.LeftAxis)));
+    }
 
-    // if (stick.getRawAxis(1) < 0.1 && stick.getRawAxis(1) > -0.1)
-    // {
-    //   left_drive_motor.set(0);
-    // }
+    if (Math.abs(driverJoystick.getRawAxis(ControllerConstants.LeftAxis))>ControllerConstants.LeftAxisDeadZone)
+    {
+      left_drive_motor.set(0);
+    }
 
-    // if (stick.getRawAxis(5) > 0.1 || stick.getRawAxis(5) < -0.1) 
-    // {
-    //   right_drive_motor.set(stick.getRawAxis(5));
-    // }
+    if (Math.abs(Math.abs(driverJoystick.getRawAxis(ControllerConstants.RightAxis))) > ControllerConstants.RightAxisDeadZone){
+      right_drive_motor.set(Math.abs(driverJoystick.getRawAxis(ControllerConstants.RightAxis)));
+    }
 
-    // if (stick.getRawAxis(5) < 0.1 && stick.getRawAxis(5) > -0.1)
-    // {
-    //   right_drive_motor.set(0);
-    // }
+    if (Math.abs(driverJoystick.getRawAxis(ControllerConstants.RightAxis))>ControllerConstants.RightAxisDeadZone)
+    {
+      right_drive_motor.set(0);
+    }
     
     // if (stick.getRawAxis(3) > 0.4)
     // {
