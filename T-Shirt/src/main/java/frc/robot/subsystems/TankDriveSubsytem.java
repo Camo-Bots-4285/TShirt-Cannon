@@ -4,23 +4,26 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TankDriveConstants;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 
 
 
 public class TankDriveSubsytem extends SubsystemBase {  
   
-   PWMSparkMax LeftTopDrive;
-    PWMSparkMax LeftBottomDrive;
-    PWMSparkMax RightTopDrive;
-    PWMSparkMax RightBottomDrive;
+   TalonSRX LeftTopDrive;
+   TalonSRX LeftBottomDrive;
+   TalonSRX RightTopDrive;
+   TalonSRX RightBottomDrive;
 
 
   public TankDriveSubsytem() {
-    LeftTopDrive = new PWMSparkMax(0);
-    LeftBottomDrive = new PWMSparkMax(0);
-    RightTopDrive = new PWMSparkMax(0);
-    RightBottomDrive = new PWMSparkMax(0);
+    LeftTopDrive = new TalonSRX(0);
+    LeftBottomDrive = new TalonSRX(0);
+    RightTopDrive = new TalonSRX(0);
+    RightBottomDrive = new TalonSRX(0);
 
     LeftTopDrive.setInverted(false);
     LeftBottomDrive.setInverted(false);
@@ -75,17 +78,18 @@ public class TankDriveSubsytem extends SubsystemBase {
     double LeftMotorSpeed = LeftSpeed / TankDriveConstants.WHEEL_CIRCUMFERENCE* TankDriveConstants.GEAR_RATIO;
     double RightMotorSpeed = RightSpeed / TankDriveConstants.WHEEL_CIRCUMFERENCE* TankDriveConstants.GEAR_RATIO;
 
-    LeftTopDrive.setVoltage(LeftMotorSpeed);
-    LeftBottomDrive.setVoltage(LeftMotorSpeed);
-    RightTopDrive.setVoltage(RightMotorSpeed);
-    RightBottomDrive.setVoltage(RightMotorSpeed);
+    LeftTopDrive.set(ControlMode.Velocity,LeftMotorSpeed);
+    LeftBottomDrive.set(ControlMode.Velocity,LeftMotorSpeed);
+    RightTopDrive.set(ControlMode.Velocity, RightMotorSpeed);
+    RightBottomDrive.set(ControlMode.Velocity, RightMotorSpeed);
+
     }
 
     public void stop(){
-    LeftTopDrive.stopMotor();
-    LeftBottomDrive.stopMotor();
-    RightTopDrive.stopMotor();
-    RightBottomDrive.stopMotor();
+    LeftTopDrive.set(ControlMode.Velocity, 0);
+    LeftBottomDrive.set(ControlMode.Velocity, 0);
+    RightTopDrive.set(ControlMode.Velocity, 0);
+    RightBottomDrive.set(ControlMode.Velocity, 0);
 
     }
 }
