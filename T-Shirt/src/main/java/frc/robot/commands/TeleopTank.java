@@ -1,11 +1,13 @@
-package main.java.frc.commands;
+package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.TankConstants;
+import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.TankDriveConstants;
+import frc.robot.subsystems.TankDriveSubsytem;
 import frc.robot.Robot;
 
 
@@ -18,7 +20,7 @@ public class TeleopTank extends Command {
    * and passes in our joystick inputs into it.
    */
 
-  private final TankBase drive;
+  private final TankDriveSubsytem drive;
 
   /*
    * Joysticks return DoubleSuppliers when the get methods are called
@@ -28,14 +30,13 @@ public class TeleopTank extends Command {
    */
   private final DoubleSupplier forwardLeft;
   private final DoubleSupplier forwardRight;
-  private final DoubleSupplier speedchange;
   private final SlewRateLimiter LeftLimiter, RightLimiter;
   public static double fwdLeft;
   public static double fwdRight;
 
 
   public TeleopTank(
-      TankBase subsystem,
+      TankDriveSubsytem subsystem,
       DoubleSupplier fwdLeft,
       DoubleSupplier fwdRight
     ) {
@@ -44,11 +45,8 @@ public class TeleopTank extends Command {
     forwardLeft = fwdLeft;
     forwardRight = fwdRight;
   
-
-
-
-    this.LeftLimiter = new SlewRateLimiter(TankConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
-    this.RightLimiter = new SlewRateLimiter(TankConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
+    this.LeftLimiter = new SlewRateLimiter(TankDriveConstants.MAX_ACCELERATION);
+    this.RightLimiter = new SlewRateLimiter(TankDriveConstants.MAX_ACCELERATION);
 
 
     addRequirements(subsystem);
@@ -58,8 +56,7 @@ public class TeleopTank extends Command {
   public void execute() {
         // System.out.println(fwdLeft);
         // System.out.println(fwdRight);
-if (TankBase.AllowMainDriving == true){
-   
+
     /*
      * Units are given in meters per second radians per second. Since joysticks give output
      * from -1 to 1, we multiply the outputs by the max speed. Otherwise, our max speed
@@ -72,23 +69,23 @@ if (TankBase.AllowMainDriving == true){
     
     // 2. Apply deadband/deadzone, can edit this later to have smoother behavior
     //If velocity is less then number it will be set to zero need to tune these value with driver
-    fwdLeft = Math.abs(fwdLeft) > 0.1 ? fwdLeft : 0.0; 
-    fwdRight = Math.abs(fwdRight) > 0.04 ? fwdRight : 0.0;//0.1
+    fwdLeft = Math.abs(fwdLeft) > ControllerConstants.LeftAxisDeadZone ? fwdLeft : 0.0; 
+    fwdRight = Math.abs(fwdRight) > ControllerConstants.RightAxisDeadZone ? fwdRight : 0.0;//0.1
     
 
     // 3. Make the driving smoother this will set max velocity in teleop 
     //There should be three setting that are programed in normal and other two are activated by buttons 
     //superfast and superslow(should be pared with high amps if push needed)
-    fwdLeft = LeftLimiter.calculate(fwdLeft) * TankConstants.kTeleDriveMaxSpeedMetersPerSecond;
-    fwdRight = RightLimiter.calculate(fwdRight) * TankConstants.kTeleDriveMaxSpeedMetersPerSecond;
+    fwdLeft = LeftLimiter.calculate(fwdLeft) * TankDriveConstants.MAX_VELOCITY;
+    fwdRight = RightLimiter.calculate(fwdRight) * TankDriveConstants.MAX_VELOCITY;
 
  
     drive.drive(
-        -fwdLeft,
-        -fwdRight
+        fwdLeft,
+        fwdRight
        
       );
-}
+
   }
 }
 

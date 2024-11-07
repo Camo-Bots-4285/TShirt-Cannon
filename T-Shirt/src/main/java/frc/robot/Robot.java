@@ -7,12 +7,15 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
+
+import org.littletonrobotics.junction.LoggedRobot;
+
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -21,25 +24,29 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends IterativeRobot {
-
-  Joystick stick = new Joystick(0);
+public class Robot extends LoggedRobot {
 
 
-  Talon left_drive_motor = new Talon(4);
-  Talon right_drive_motor = new Talon(2);
-  Talon vertical_shooter_motor = new Talon(1);
-  Talon horizontal_shooter_motor = new Talon(0);
+    public static RobotContainer m_robotContainer;
 
-  DoubleSolenoid confetti1 = new DoubleSolenoid(0, 1);
-  DoubleSolenoid confetti2 = new DoubleSolenoid(2, 3);
-  DoubleSolenoid confetti3 = new DoubleSolenoid(4, 5);
-  DoubleSolenoid shooter = new DoubleSolenoid(6, 7);
+
+  // Joystick stick = new Joystick(0);
+
+
+  // Talon left_drive_motor = new Talon(4);
+  // Talon right_drive_motor = new Talon(2);
+  // Talon vertical_shooter_motor = new Talon(1);
+  // Talon horizontal_shooter_motor = new Talon(0);
+
+  // DoubleSolenoid confetti1 = new DoubleSolenoid(0, 1);
+  // DoubleSolenoid confetti2 = new DoubleSolenoid(2, 3);
+  // DoubleSolenoid confetti3 = new DoubleSolenoid(4, 5);
+  // DoubleSolenoid shooter = new DoubleSolenoid(6, 7);
   
-  private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
-  private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  // private static final String kDefaultAuto = "Default";
+  // private static final String kCustomAuto = "My Auto";
+  // private String m_autoSelected;
+  // private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   /**
    * This function is run when the robot is first started up and should be
@@ -47,11 +54,14 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void robotInit() {
-    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
 
-    left_drive_motor.setInverted(true);
+    m_robotContainer = new RobotContainer(this); 
+
+    // m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
+    // m_chooser.addOption("My Auto", kCustomAuto);
+    // SmartDashboard.putData("Auto choices", m_chooser);
+
+    // left_drive_motor.setInverted(true);
   }
 
   /**
@@ -64,6 +74,8 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void robotPeriodic() {
+        CommandScheduler.getInstance().run();
+   
   }
 
   /**
@@ -79,10 +91,10 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autoSelected = m_chooser.getSelected();
-    // autoSelected = SmartDashboard.getString("Auto Selector",
-    // defaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
+    // m_autoSelected = m_chooser.getSelected();
+    // // autoSelected = SmartDashboard.getString("Auto Selector",
+    // // defaultAuto);
+    // System.out.println("Auto selected: " + m_autoSelected);
   }
 
   /**
@@ -90,15 +102,15 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
-    }
+    // switch (m_autoSelected) {
+    //   case kCustomAuto:
+    //     // Put custom auto code here
+    //     break;
+    //   case kDefaultAuto:
+    //   default:
+    //     // Put default auto code here
+    //     break;
+    // }
   }
 
   /**
@@ -106,112 +118,112 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void teleopPeriodic() {
-    boolean bconfetti2 = stick.getRawButtonPressed(5);
-    boolean sconfetti2 = stick.getRawButtonReleased(5);
-    boolean bconfetti3 = stick.getRawButtonPressed(6);
-    boolean sconfetti3 = stick.getRawButtonReleased(6);
+    // boolean bconfetti2 = stick.getRawButtonPressed(5);
+    // boolean sconfetti2 = stick.getRawButtonReleased(5);
+    // boolean bconfetti3 = stick.getRawButtonPressed(6);
+    // boolean sconfetti3 = stick.getRawButtonReleased(6);
 
-    boolean up_vertical = stick.getRawButtonPressed(4);
-    boolean up_vertical_stop = stick.getRawButtonReleased(4);
-    boolean down_vertical = stick.getRawButtonPressed(1);
-    boolean down_vertical_stop = stick.getRawButtonReleased(1);
+    // boolean up_vertical = stick.getRawButtonPressed(4);
+    // boolean up_vertical_stop = stick.getRawButtonReleased(4);
+    // boolean down_vertical = stick.getRawButtonPressed(1);
+    // boolean down_vertical_stop = stick.getRawButtonReleased(1);
 
-    boolean right_horizontal = stick.getRawButtonPressed(2);
-    boolean right_horizontal_stop = stick.getRawButtonReleased(2);
-    boolean left_horizontal = stick.getRawButtonPressed(3);
-    boolean left_horizontal_stop = stick.getRawButtonReleased(3);
+    // boolean right_horizontal = stick.getRawButtonPressed(2);
+    // boolean right_horizontal_stop = stick.getRawButtonReleased(2);
+    // boolean left_horizontal = stick.getRawButtonPressed(3);
+    // boolean left_horizontal_stop = stick.getRawButtonReleased(3);
     
-    if (stick.getRawAxis(1) > 0.1 || stick.getRawAxis(1) < -0.1) 
-    {
-      left_drive_motor.set(stick.getRawAxis(1)/2);
-    }
+    // if (stick.getRawAxis(1) > 0.1 || stick.getRawAxis(1) < -0.1) 
+    // {
+    //   left_drive_motor.set(stick.getRawAxis(1)/2);
+    // }
 
-    if (stick.getRawAxis(1) < 0.1 && stick.getRawAxis(1) > -0.1)
-    {
-      left_drive_motor.set(0);
-    }
+    // if (stick.getRawAxis(1) < 0.1 && stick.getRawAxis(1) > -0.1)
+    // {
+    //   left_drive_motor.set(0);
+    // }
 
-    if (stick.getRawAxis(5) > 0.1 || stick.getRawAxis(5) < -0.1) 
-    {
-      right_drive_motor.set(stick.getRawAxis(5));
-    }
+    // if (stick.getRawAxis(5) > 0.1 || stick.getRawAxis(5) < -0.1) 
+    // {
+    //   right_drive_motor.set(stick.getRawAxis(5));
+    // }
 
-    if (stick.getRawAxis(5) < 0.1 && stick.getRawAxis(5) > -0.1)
-    {
-      right_drive_motor.set(0);
-    }
+    // if (stick.getRawAxis(5) < 0.1 && stick.getRawAxis(5) > -0.1)
+    // {
+    //   right_drive_motor.set(0);
+    // }
     
-    if (stick.getRawAxis(3) > 0.4)
-    {
-      shooter.set(DoubleSolenoid.Value.kReverse);
-    }
-    if (stick.getRawAxis(3) < 0.4)
-    {
-      shooter.set(DoubleSolenoid.Value.kForward);
-    }
+    // if (stick.getRawAxis(3) > 0.4)
+    // {
+    //   shooter.set(DoubleSolenoid.Value.kReverse);
+    // }
+    // if (stick.getRawAxis(3) < 0.4)
+    // {
+    //   shooter.set(DoubleSolenoid.Value.kForward);
+    // }
 
-    if (stick.getRawAxis(2) > 0.4)
-    {
-      confetti1.set(DoubleSolenoid.Value.kReverse);
-    }
-    if (stick.getRawAxis(2) < 0.4)
-    {
-      confetti1.set(DoubleSolenoid.Value.kReverse);
-    }
+    // if (stick.getRawAxis(2) > 0.4)
+    // {
+    //   confetti1.set(DoubleSolenoid.Value.kReverse);
+    // }
+    // if (stick.getRawAxis(2) < 0.4)
+    // {
+    //   confetti1.set(DoubleSolenoid.Value.kReverse);
+    // }
     
-    if (up_vertical)
-    {
-      vertical_shooter_motor.set(.2);
-    }
-    if (up_vertical_stop)
-    {
-      vertical_shooter_motor.set(0);
-    }
+    // if (up_vertical)
+    // {
+    //   vertical_shooter_motor.set(.2);
+    // }
+    // if (up_vertical_stop)
+    // {
+    //   vertical_shooter_motor.set(0);
+    // }
 
-    if (down_vertical)
-    {
-      vertical_shooter_motor.set(-.2);
-    }
-    if (down_vertical_stop)
-    {
-      vertical_shooter_motor.set(0);
-    }
+    // if (down_vertical)
+    // {
+    //   vertical_shooter_motor.set(-.2);
+    // }
+    // if (down_vertical_stop)
+    // {
+    //   vertical_shooter_motor.set(0);
+    // }
 
-    if (left_horizontal)
-    {
-      horizontal_shooter_motor.set(.2);
-    }
-    if (left_horizontal_stop)
-    {
-      horizontal_shooter_motor.set(0);
-    }
+    // if (left_horizontal)
+    // {
+    //   horizontal_shooter_motor.set(.2);
+    // }
+    // if (left_horizontal_stop)
+    // {
+    //   horizontal_shooter_motor.set(0);
+    // }
 
-    if (right_horizontal)
-    {
-      horizontal_shooter_motor.set(-.2);
-    }
-    if (right_horizontal_stop)
-    {
-      horizontal_shooter_motor.set(0);
-    }
+    // if (right_horizontal)
+    // {
+    //   horizontal_shooter_motor.set(-.2);
+    // }
+    // if (right_horizontal_stop)
+    // {
+    //   horizontal_shooter_motor.set(0);
+    // }
     
-    if (bconfetti2)
-    {
-      confetti2.set(DoubleSolenoid.Value.kReverse);
-    }
-    if (sconfetti2)
-    {
-      confetti2.set(DoubleSolenoid.Value.kForward);
-    }
+    // if (bconfetti2)
+    // {
+    //   confetti2.set(DoubleSolenoid.Value.kReverse);
+    // }
+    // if (sconfetti2)
+    // {
+    //   confetti2.set(DoubleSolenoid.Value.kForward);
+    // }
 
-    if (bconfetti3)
-    {
-      confetti3.set(DoubleSolenoid.Value.kReverse);
-    }
-    if (sconfetti3)
-    {
-      confetti3.set(DoubleSolenoid.Value.kForward);
-    }
+    // if (bconfetti3)
+    // {
+    //   confetti3.set(DoubleSolenoid.Value.kReverse);
+    // }
+    // if (sconfetti3)
+    // {
+    //   confetti3.set(DoubleSolenoid.Value.kForward);
+    // }
     
   }
 
@@ -220,5 +232,11 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void testPeriodic() {
+  }
+
+  @Override
+  public void testInit() {
+    // Cancels all running commands at the start of test mode.
+    CommandScheduler.getInstance().cancelAll();
   }
 }
